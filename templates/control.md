@@ -1,6 +1,29 @@
 # {{title}} 컨트롤 가이드
 
-## 1. 시스템 흐름 및 구성요소
+## 1. 시스템 검증
+
+### 검증 기준
+
+{{#each validationCriteria}}
+
+- {{title}}: {{description}}
+  {{/each}}
+
+### 검증 방법
+
+{{#each validationMethods}}
+
+- {{title}}: {{description}}
+  {{/each}}
+
+### 검증 결과
+
+{{#each validationResults}}
+
+- {{title}}: {{description}}
+  {{/each}}
+
+## 2. 시스템 흐름 및 구성요소
 
 {{#each system_flows}}
 
@@ -29,9 +52,9 @@
 
 {{/each}}
 
-## 2. 시나리오별 예제
+## 3. 시나리오별 예제
 
-### 2.1 정상 시나리오
+### 3.1 정상 시나리오
 
 {{#each normal_scenarios}}
 
@@ -45,7 +68,7 @@
 
 {{/each}}
 
-### 2.2 오류 시나리오
+### 3.2 오류 시나리오
 
 {{#each error_scenarios}}
 
@@ -66,9 +89,9 @@
 
 {{/each}}
 
-## 3. 로그 정보 및 디버깅
+## 4. 로그 정보 및 디버깅
 
-### 3.1 로그 파일 구조
+### 4.1 로그 파일 구조
 
 {{#each log_files}}
 
@@ -78,7 +101,7 @@
   - 포맷: `{{format}}`
     {{/each}}
 
-### 3.2 이벤트 처리 시스템
+### 4.2 이벤트 처리 시스템
 
 #### 이벤트 큐 관리
 
@@ -108,7 +131,7 @@
   - 에러 처리: {{error_handling}}
     {{/each}}
 
-### 3.3 동기화 메커니즘
+### 4.3 동기화 메커니즘
 
 #### 리소스 잠금
 
@@ -134,7 +157,7 @@
   - 보관 기간: {{retention_period}}
     {{/with}}
 
-### 3.4 문제 해결 가이드
+### 4.4 문제 해결 가이드
 
 #### 로그 분석 절차
 
@@ -173,9 +196,9 @@
    {{#if warning}}
    > ⚠️ {{warning}} > {{/if}} > {{/each}}
 
-## 4. 시스템 상태 및 모니터링
+## 5. 시스템 상태 및 모니터링
 
-### 4.1 현재 상태
+### 5.1 현재 상태
 
 {{#with system_status}}
 
@@ -185,7 +208,7 @@
 - **에러율:** {{error_rate}}
   {{/with}}
 
-### 4.2 모니터링 명령어
+### 5.2 모니터링 명령어
 
 ```bash
 {{#each monitoring_commands}}
@@ -195,9 +218,9 @@
 {{/each}}
 ```
 
-## 5. CI/CD 통합
+## 6. CI/CD 통합
 
-### 5.1 배포 파이프라인
+### 6.1 배포 파이프라인
 
 ```bash
 {{#each deployment_pipeline}}
@@ -207,7 +230,7 @@
 {{/each}}
 ```
 
-### 5.2 자동화된 테스트
+### 6.2 자동화된 테스트
 
 ```bash
 {{#each automated_tests}}
