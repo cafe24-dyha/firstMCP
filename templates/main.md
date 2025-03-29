@@ -58,17 +58,21 @@
 
 {{#each pipelines}}
 {{index}}. {{name}}
-{{#each steps}} - {{this}}
-{{/each}}
-{{/each}}
+{{#each steps}}
+
+- {{this}}
+  {{/each}}
+  {{/each}}
 
 ### 기능 목록
 
 {{#each features}}
 {{index}}. {{name}}
-{{#each details}} - {{this}}
-{{/each}}
-{{/each}}
+{{#each details}}
+
+- {{this}}
+  {{/each}}
+  {{/each}}
 
 ### 백업 관리와 로그·매뉴얼 동기화
 
