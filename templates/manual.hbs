@@ -1,0 +1,54 @@
+#
+{{title}}
+
+**버전**:
+{{version}}
+**작성자**:
+{{author}}
+**작성일**:
+{{date}}
+
+## 개요
+{{description}}
+
+## 설치 및 설정
+{{#each setup}}
+  -
+  {{this}}
+{{/each}}
+
+## 주요 기능
+{{#each features}}
+  -
+  {{this}}
+{{/each}}
+
+## 설정 옵션 | 옵션 | 값 | 설명 | |------|-----|------|
+{{#each configuration}}
+  |
+  {{@key}}
+  |
+  {{this}}
+  | |
+{{/each}}
+
+{{#if dependencies}}
+  ## 의존성
+  {{#each dependencies}}
+    -
+    {{this}}
+  {{/each}}
+{{/if}}
+
+{{#if changes}}
+  ## 변경 이력
+  {{#each changes}}
+    ###
+    {{this.version}}
+    ({{this.date}})
+    {{this.description}}
+  {{/each}}
+{{/if}}
+
+--- *이 문서는 자동으로 생성되었습니다.* *최종 수정일:
+{{date}}*

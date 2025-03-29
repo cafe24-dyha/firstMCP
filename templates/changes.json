@@ -1,0 +1,14 @@
+[
+  {
+    "type": "MANUAL_GENERATION",
+    "description": "매뉴얼 자동 생성",
+    "timestamp": "2025-03-29T12:49:47.678Z",
+    "status": "IN_PROGRESS"
+  },
+  {
+    "type": "MANUAL_GENERATION",
+    "description": "매뉴얼 자동 생성",
+    "timestamp": "2025-03-29T12:52:02.145Z",
+    "status": "IN_PROGRESS"
+  }
+]

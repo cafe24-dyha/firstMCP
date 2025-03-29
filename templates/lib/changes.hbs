@@ -1,0 +1,112 @@
+{{! 최근 변경사항 템플릿 }}
+# 시스템 변경 이력 ## 최신 업데이트
+{{#with latestChange}}
+  ### 마지막 변경:
+  {{timestamp}}
+  - 변경 유형:
+  {{type}}
+  - 변경 내용:
+  {{description}}
+  - 영향 범위:
+  {{scope}}
+  - 담당자:
+  {{author}}
+{{/with}}
+
+## 변경 이력
+{{#each changes}}
+  ###
+  {{timestamp}}
+  - 유형:
+  {{type}}
+  - 내용:
+  {{description}}
+  - 범위:
+  {{scope}}
+  - 담당자:
+  {{author}}
+  - 상태:
+  {{status}}
+  {{#if relatedFiles}}
+    - 관련 파일:
+    {{#each relatedFiles}}
+      - `{{this}}`
+    {{/each}}
+  {{/if}}
+  {{#if backupPath}}
+    - 백업 경로: `{{backupPath}}`
+  {{/if}}
+{{/each}}
+
+## 시스템 검증 ### 자동화 테스트 결과 - Directory-Agnostic 실행 테스트:
+{{validation.directoryAgnostic}}
+- 상대 경로 처리:
+{{validation.relativePath}}
+- 동적 경로 해석:
+{{validation.dynamicPath}}
+- 경로 독립성:
+{{validation.pathIndependence}}
+
+- Context-Driven Output 테스트:
+{{validation.contextDriven}}
+- 데이터 처리:
+{{validation.dataProcessing}}
+- 템플릿 처리:
+{{validation.templateProcessing}}
+- 출력 검증:
+{{validation.outputValidation}}
+
+### 검증 상세 정보
+{{#each validation.details}}
+  ####
+  {{name}}
+  - 상태:
+  {{status}}
+  - 결과:
+  {{result}}
+  - 소요 시간:
+  {{duration}}
+  {{#if error}}
+    - 오류 내용:
+    {{error}}
+  {{/if}}
+{{/each}}
+
+## 통계 - 총 변경 건수:
+{{stats.totalChanges}}
+- 기능 개선:
+{{stats.features}}
+- 버그 수정:
+{{stats.bugfixes}}
+- 구조 개선:
+{{stats.refactoring}}
+- 문서 업데이트:
+{{stats.documentation}}
+
+## 예정된 변경사항
+{{#each plannedChanges}}
+  ###
+  {{dueDate}}
+  - 우선순위:
+  {{priority}}
+  - 내용:
+  {{description}}
+  - 담당자:
+  {{assignee}}
+{{/each}}
+
+## 백업 정보 - 최신 백업 시간:
+{{backup.lastBackupTime}}
+- 백업 경로: `{{backup.path}}` - 보관 중인 백업 수:
+{{backup.count}}/{{backup.maxCount}}
+
+## 시스템 상태 - 마지막 실행:
+{{system.lastRun}}
+- 실행 시간:
+{{system.executionTime}}
+- 처리 상태:
+{{system.status}}
+- 오류 발생:
+{{system.errors}}
+- 경고 발생:
+{{system.warnings}}
