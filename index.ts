@@ -19,12 +19,13 @@ async function main() {
     const projectPath = args.find((arg) => arg.startsWith('--path='))?.split('=')[1] || '.';
     const templatesPath =
       args.find((arg) => arg.startsWith('--templates='))?.split('=')[1] || './templates';
-    const outputPath = args.find((arg) => arg.startsWith('--output='))?.split('=')[1] || './output';
 
     // 절대 경로 변환
     const projectRoot = path.resolve(projectPath);
     const templatesDir = path.resolve(templatesPath);
-    const outputDir = path.resolve(outputPath);
+
+    // 요청 폴더(@manuals)의 manuals 폴더에 매뉴얼 생성
+    const outputDir = path.resolve(path.join(projectRoot, '..', 'manuals'));
 
     // 템플릿 매니저 초기화
     const templateManager = new TemplateManager(
