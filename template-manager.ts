@@ -1,8 +1,8 @@
-import fs from 'fs-extra';
-import path from 'path';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import Handlebars from 'handlebars';
 import logger from './logger';
-import { ManualTemplateData } from './types.d';
+import { ManualTemplateData, HandlebarsTemplateDelegate, ChangeRecord, BackupFile } from './types';
 
 /**
  * template-manager.ts
@@ -31,16 +31,10 @@ export interface PipelineTemplate {
 
 export interface TemplateManagerConfig {
   projectRoot: string;
-}
-
-export interface ChangeRecord {
-  type: string;
-  description: string;
-  timestamp: string;
-  status: string;
-  author?: string;
-  scope?: string;
-  relatedFiles?: string[];
+  templateDir: string;
+  backupDir: string;
+  maxBackups: number;
+  debug?: boolean;
 }
 
 export interface SystemStatus {
@@ -50,36 +44,46 @@ export interface SystemStatus {
 }
 
 export class TemplateManager {
-  private templateDir: string;
-  private backupDir: string;
-  private maxBackups: number;
-  private debug: boolean;
   private config: TemplateManagerConfig;
+  private projectRoot: string;
 
-  constructor(options: TemplateManagerOptions, config: TemplateManagerConfig) {
-    this.templateDir = options.templateDir;
-    this.backupDir = options.backupDir;
-    this.maxBackups = options.maxBackups;
-    this.debug = options.debug || false;
+  constructor(config: TemplateManagerConfig, options: { projectRoot: string }) {
     this.config = config;
-    this.initializeDirectories();
+    this.projectRoot = options.projectRoot;
   }
 
-  private initializeDirectories(): void {
-    try {
-      fs.ensureDirSync(this.templateDir);
-      fs.ensureDirSync(this.backupDir);
-      fs.ensureDirSync(path.join(this.templateDir, 'lib'));
-      logger.info('템플릿 디렉토리 초기화 완료');
-    } catch (error) {
-      logger.error(`템플릿 디렉토리 초기화 실패: ${(error as Error).message}`);
-      throw error;
-    }
+  public async initialize(): Promise<void> {
+    await fs.ensureDir(this.config.templateDir);
+    await fs.ensureDir(this.config.backupDir);
+  }
+
+  public getTemplateDir(): string {
+    return this.config.templateDir;
+  }
+
+  public getProjectRoot(): string {
+    return this.projectRoot;
+  }
+
+  public getBackupDir(): string {
+    return this.config.backupDir;
+  }
+
+  public async getTemplate(templateName: string): Promise<HandlebarsTemplateDelegate> {
+    const templatePath = path.join(this.config.templateDir, templateName);
+    const templateContent = await fs.readFile(templatePath, 'utf-8');
+    return Handlebars.compile(templateContent);
+  }
+
+  public async createBackup(fileName: string, content: string): Promise<void> {
+    const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
+    const backupPath = path.join(this.config.backupDir, `${fileName}-${timestamp}`);
+    await fs.writeFile(backupPath, content, 'utf-8');
   }
 
   public async createPipelineTemplate(pipeline: PipelineTemplate): Promise<void> {
     try {
-      const templatePath = path.join(this.templateDir, 'lib', `${pipeline.name}.hbs`);
+      const templatePath = path.join(this.config.templateDir, 'lib', `${pipeline.name}.hbs`);
       const content = this.generatePipelineContent(pipeline);
       await fs.writeFile(templatePath, content, 'utf-8');
       logger.info(`파이프라인 템플릿 생성 완료: ${pipeline.name}`);
@@ -114,10 +118,10 @@ ${pipeline.steps
 
   public async backupTemplate(templateName: string): Promise<void> {
     try {
-      const sourcePath = path.join(this.templateDir, templateName);
+      const sourcePath = path.join(this.config.templateDir, templateName);
       const timestamp = new Date().toISOString().replace(/[-:.]/g, '');
       const backupPath = path.join(
-        this.backupDir,
+        this.config.backupDir,
         `${path.basename(templateName, '.hbs')}-${timestamp}.hbs`
       );
 
@@ -132,18 +136,25 @@ ${pipeline.steps
 
   private async enforceBackupLimit(): Promise<void> {
     try {
-      const files = await fs.readdir(this.backupDir);
-      const backupFiles = files
-        .filter((file) => file.endsWith('.hbs'))
-        .map((file) => ({
-          name: file,
-          path: path.join(this.backupDir, file),
-          mtime: fs.statSync(path.join(this.backupDir, file)).mtime.getTime(),
-        }))
-        .sort((a, b) => b.mtime - a.mtime);
+      const files = await fs.readdir(this.config.backupDir);
+      const backupFiles: BackupFile[] = [];
 
-      if (backupFiles.length > this.maxBackups) {
-        const filesToDelete = backupFiles.slice(this.maxBackups);
+      for (const file of files.filter((f) => f.endsWith('.hbs'))) {
+        const filePath = path.join(this.config.backupDir, file);
+        const isFile = await fs.pathExists(filePath);
+        if (isFile) {
+          backupFiles.push({
+            name: file,
+            path: filePath,
+            mtime: new Date().getTime(),
+          });
+        }
+      }
+
+      backupFiles.sort((a, b) => b.mtime - a.mtime);
+
+      if (backupFiles.length > this.config.maxBackups) {
+        const filesToDelete = backupFiles.slice(this.config.maxBackups);
         for (const file of filesToDelete) {
           await fs.remove(file.path);
           logger.info(`오래된 템플릿 백업 삭제: ${file.name}`);
@@ -157,9 +168,9 @@ ${pipeline.steps
 
   public async restoreTemplate(backupName: string): Promise<void> {
     try {
-      const backupPath = path.join(this.backupDir, backupName);
+      const backupPath = path.join(this.config.backupDir, backupName);
       const originalName = backupName.split('-')[0] + '.hbs';
-      const targetPath = path.join(this.templateDir, originalName);
+      const targetPath = path.join(this.config.templateDir, originalName);
 
       await fs.copy(backupPath, targetPath);
       logger.info(`템플릿 복원 완료: ${targetPath}`);
@@ -171,7 +182,7 @@ ${pipeline.steps
 
   public async recordChange(change: ChangeRecord): Promise<void> {
     try {
-      const changesPath = path.join(this.templateDir, 'changes.json');
+      const changesPath = path.join(this.projectRoot, 'manuals', 'changes.json');
       let changes: ChangeRecord[] = [];
 
       if (await fs.pathExists(changesPath)) {
@@ -180,6 +191,7 @@ ${pipeline.steps
       }
 
       changes.push(change);
+      await fs.ensureDir(path.dirname(changesPath));
       await fs.writeFile(changesPath, JSON.stringify(changes, null, 2), 'utf-8');
       logger.info(`변경 사항 기록 완료: ${change.description}`);
     } catch (error) {
@@ -190,7 +202,8 @@ ${pipeline.steps
 
   public async updateStatus(status: SystemStatus): Promise<void> {
     try {
-      const statusPath = path.join(this.templateDir, 'status.json');
+      const statusPath = path.join(this.projectRoot, 'manuals', 'status.json');
+      await fs.ensureDir(path.dirname(statusPath));
       await fs.writeFile(statusPath, JSON.stringify(status, null, 2), 'utf-8');
       logger.info(`시스템 상태 업데이트 완료: ${status.status}`);
     } catch (error) {
@@ -201,7 +214,7 @@ ${pipeline.steps
 
   public async generateChangelog(): Promise<string> {
     try {
-      const changesPath = path.join(this.templateDir, 'changes.json');
+      const changesPath = path.join(this.config.templateDir, 'changes.json');
       if (!(await fs.pathExists(changesPath))) {
         return '변경 이력이 없습니다.';
       }
@@ -244,10 +257,18 @@ ${pipeline.steps
         .replace(/&#x60;/g, '`')
         .replace(/&lt;/g, '<')
         .replace(/&gt;/g, '>')
-        .replace(/&amp;/g, '&');
+        .replace(/&amp;/g, '&')
+        .replace(/&#x3D;/g, '=');
 
       // 연속된 빈 줄 제거
       result = result.replace(/\n{3,}/g, '\n\n');
+
+      // 불필요한 공백 제거
+      result = result
+        .split('\n')
+        .map((line) => line.trimEnd())
+        .join('\n')
+        .replace(/\n\s*\n/g, '\n\n');
 
       logger.info(`템플릿 처리 완료: ${path.basename(templatePath)}`);
       return result;
@@ -257,285 +278,210 @@ ${pipeline.steps
     }
   }
 
-  public getDefaultTemplateData(): ManualTemplateData {
-    const timestamp = new Date().toISOString();
+  private async analyzeScriptsMain(): Promise<{
+    scripts: { name: string; description: string; path: string }[];
+    utils: { name: string; description: string; path: string }[];
+    configs: { name: string; content: Record<string, unknown> }[];
+  }> {
+    const scriptsDir = this.projectRoot;
+    const result = {
+      scripts: [] as { name: string; description: string; path: string }[],
+      utils: [] as { name: string; description: string; path: string }[],
+      configs: [] as { name: string; content: Record<string, unknown> }[],
+    };
+
+    try {
+      const files = await fs.readdir(scriptsDir);
+
+      for (const file of files) {
+        const fullPath = path.join(scriptsDir, file);
+
+        if (await fs.pathExists(fullPath)) {
+          if (file.endsWith('.ts') && !file.endsWith('.d.ts')) {
+            const content = await fs.readFile(fullPath, 'utf-8');
+            const description = this.extractFileDescription(content);
+
+            if (file.includes('util') || file === 'logger.ts' || file === 'types.ts') {
+              result.utils.push({
+                name: file,
+                description,
+                path: fullPath,
+              });
+            } else {
+              result.scripts.push({
+                name: file,
+                description,
+                path: fullPath,
+              });
+            }
+          } else if (file.endsWith('.json')) {
+            const content = await fs.readFile(fullPath, 'utf-8');
+            result.configs.push({
+              name: file,
+              content: JSON.parse(content) as Record<string, unknown>,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      logger.error(`스크립트 분석 실패: ${(error as Error).message}`);
+    }
+
+    return result;
+  }
+
+  private extractFileDescription(content: string): string {
+    const lines = content.split('\n');
+    let description = '';
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith('/*') || line.startsWith('/**') || line.startsWith('//')) {
+        const comment = line.replace(/^\/\*+|\*+\/|\/\//, '').trim();
+        if (comment && !comment.includes('@') && !comment.includes('TODO')) {
+          description = comment;
+          break;
+        }
+      } else if (line.length > 0 && !line.startsWith('import')) {
+        break;
+      }
+    }
+
+    return description;
+  }
+
+  private async getDirectoryStructure(dir: string): Promise<string> {
+    try {
+      const items = await fs.readdir(dir);
+      let structure = '';
+
+      for (const item of items) {
+        const fullPath = path.join(dir, item);
+        try {
+          await fs.readdir(fullPath);
+          structure += `\n├── ${item}/`;
+          const subItems = await this.getDirectoryStructure(fullPath);
+          structure += subItems
+            .split('\n')
+            .map((line) => `\n│   ${line}`)
+            .join('');
+        } catch (error) {
+          structure += `\n├── ${item}`;
+        }
+      }
+
+      return structure;
+    } catch (error) {
+      logger.error(`디렉토리 구조 분석 실패: ${(error as Error).message}`);
+      throw error;
+    }
+  }
+
+  public async getDefaultTemplateData(): Promise<ManualTemplateData> {
+    const projectPath = this.projectRoot;
+
+    const figmaIntegration = [
+      {
+        category: '디자인 시스템',
+        features: [
+          { name: 'API 엔드포인트', description: 'Figma API 엔드포인트 연동' },
+          { name: '인증', description: '인증 및 권한 관리' },
+          { name: '동기화', description: '데이터 동기화 프로세스' },
+        ],
+      },
+    ];
+
+    const automationScripts = {
+      componentGeneration: '컴포넌트 자동 생성',
+      styleUpdates: '스타일 업데이트 자동화',
+      assetExport: '에셋 내보내기 자동화',
+    };
+
+    const plugins = {
+      designSystem: '디자인 시스템 플러그인',
+      codeGenerator: '코드 생성 플러그인',
+      assetManager: '에셋 관리 플러그인',
+    };
+
+    const directoryStructure = await this.getDirectoryStructure(projectPath);
+    const keyFiles = await this.analyzeKeyFiles(projectPath);
+
     return {
-      systemName: 'MCP 자율 최적화 매뉴얼 생성 시스템',
-      systemPurpose: '웹 기반 시스템의 매뉴얼을 자동으로 생성하고 관리하는 도구',
-      environments: [
-        {
-          name: 'Node.js',
-          description: 'v20.11.1 이상 - 서버 사이드 JavaScript 런타임',
-        },
-        {
-          name: 'TypeScript',
-          description: 'v5.0.0 이상 - 정적 타입 지원 JavaScript',
-        },
-        {
-          name: 'Handlebars',
-          description: '템플릿 엔진 - 동적 문서 생성',
-        },
-        {
-          name: 'Winston',
-          description: '로깅 시스템 - 상세 로그 관리',
-        },
+      project: {
+        name: path.basename(projectPath),
+        path: projectPath,
+        manualPath: path.join(projectPath, 'manuals'),
+      },
+      projectRoot: projectPath,
+      systemName: 'Figma MCP Server',
+      systemPurpose: 'Figma 디자인 시스템과 개발 환경의 통합 및 자동화',
+      systemEnvironment: '개발 및 디자인 환경',
+      directoryStructure,
+      keyFiles,
+      mainFeatures: ['Figma API 통합', '컴포넌트 동기화', '디자인 토큰 관리'],
+      figmaMcpFeatures: [
+        { name: 'API 통합', description: 'Figma API를 통한 디자인 시스템 자동화' },
+        { name: '컴포넌트 동기화', description: 'Figma 컴포넌트와 코드베이스 간의 자동 동기화' },
+        { name: '디자인 토큰', description: '디자인 토큰의 자동 추출 및 관리' },
       ],
-      projectRoot: this.config.projectRoot,
-      directoryStructure: `├── @manuals/
-│   ├── scripts-main/      # 메인 스크립트 디렉토리
-│   │   ├── templates/     # 템플릿 파일 디렉토리
-│   │   │   ├── lib/      # 공통 템플릿 라이브러리
-│   │   │   │   ├── changes.hbs
-│   │   │   │   ├── features.hbs
-│   │   │   │   └── pipeline.hbs
-│   │   │   ├── control.md
-│   │   │   ├── main.md
-│   │   │   └── manual.hbs
-│   │   ├── src/          # 소스 코드 디렉토리
-│   │   │   ├── core/     # 핵심 기능 구현
-│   │   │   │   ├── manual-generator.ts
-│   │   │   │   ├── template-manager.ts
-│   │   │   │   └── backup-manager.ts
-│   │   │   ├── utils/    # 유틸리티 기능
-│   │   │   │   ├── logger.ts
-│   │   │   │   └── types.ts
-│   │   │   └── index.ts  # 진입점
-│   │   ├── package.json  # 프로젝트 설정
-│   │   └── tsconfig.json # TypeScript 설정
-│   ├── docs/             # 문서 디렉토리
-│   └── manuals/          # 생성된 매뉴얼 저장
-└── backups/              # 백업 디렉토리`,
-      fileDescriptions: [
-        {
-          path: 'src/core/manual-generator.ts',
-          description: '매뉴얼 생성 핵심 로직 구현',
-        },
-        {
-          path: 'src/core/template-manager.ts',
-          description: '템플릿 관리 및 데이터 처리',
-        },
-        {
-          path: 'src/core/backup-manager.ts',
-          description: '백업 생성 및 관리',
-        },
-        {
-          path: 'src/utils/logger.ts',
-          description: '시스템 로깅 유틸리티',
-        },
-        {
-          path: 'src/utils/types.ts',
-          description: '시스템 타입 정의',
-        },
-        {
-          path: 'src/index.ts',
-          description: '시스템 진입점 및 CLI 인터페이스',
-        },
+      figmaIntegration,
+      integrationFeatures: {
+        apiEndpoints: 'Figma API 엔드포인트 연동',
+        authentication: '인증 및 권한 관리',
+        dataSync: '데이터 동기화 프로세스',
+      },
+      pipeline: {
+        design: '디자인 시스템 구축',
+        development: '개발 환경 통합',
+        automation: '자동화 프로세스 구현',
+      },
+      automationScripts,
+      plugins,
+      implementation: {
+        structure: '모듈화된 구조',
+        functionality: 'API 기반 기능 구현',
+        quality: '코드 품질 관리',
+        extensibility: '플러그인 확장성',
+      },
+      changes: [{ date: new Date().toISOString(), description: '초기 시스템 설정' }],
+      validation: {
+        criteria: ['Figma API 연동 검증', '플러그인 동작 검증', '자동화 스크립트 검증'],
+        methods: ['API 엔드포인트 테스트', '플러그인 기능 테스트', '스크립트 실행 테스트'],
+      },
+      validationCriteria: ['Figma API 연동 검증', '플러그인 동작 검증', '자동화 스크립트 검증'],
+      validationMethods: ['API 엔드포인트 테스트', '플러그인 기능 테스트', '스크립트 실행 테스트'],
+      validationResults: ['API 연동 성공', '플러그인 정상 동작', '스크립트 실행 완료'],
+      cliExamples: [
+        'npx ts-node index.ts --plugin=design-system',
+        'npx ts-node index.ts --export=assets',
       ],
-      validationCriteria: [
-        {
-          title: 'Directory-Agnostic 실행',
-          description: '디렉토리 구조에 독립적인 실행 지원',
-        },
-        {
-          title: 'Context-Driven Output',
-          description: '컨텍스트 기반의 동적 출력 생성',
-        },
-        {
-          title: '자동화된 백업 관리',
-          description: '버전 관리와 복원 기능 제공',
-        },
-        {
-          title: '상세한 로깅',
-          description: '시스템 동작 추적 및 디버깅 지원',
-        },
-      ],
-      validationMethods: [
-        {
-          title: '단위 테스트',
-          description: '각 모듈의 독립적인 기능 검증',
-        },
-        {
-          title: '통합 테스트',
-          description: '모듈 간 상호작용 및 데이터 흐름 검증',
-        },
-        {
-          title: '시나리오 테스트',
-          description: '실제 사용 사례 기반 검증',
-        },
-        {
-          title: '성능 테스트',
-          description: '대용량 데이터 처리 및 동시성 검증',
-        },
-      ],
-      validationResults: [
-        {
-          title: '디렉토리 독립성',
-          description: '다양한 경로에서 정상 동작 확인',
-        },
-        {
-          title: '데이터 처리',
-          description: '동적 데이터 주입 및 변환 정상',
-        },
-        {
-          title: '백업 관리',
-          description: '자동 백업 및 복원 기능 정상',
-        },
-        {
-          title: '로깅 시스템',
-          description: '상세 로그 기록 및 조회 정상',
-        },
-      ],
-      pipelines: [
-        {
-          index: 1,
-          name: '템플릿 생성 파이프라인',
-          steps: [
-            '요구사항 분석 및 검토',
-            '시스템 구축 및 설정',
-            '템플릿 파일 생성 및 관리',
-            '백업 자동화 구현',
-          ],
-        },
-        {
-          index: 2,
-          name: '매뉴얼 생성 파이프라인',
-          steps: [
-            '시스템 정보 수집',
-            '템플릿 데이터 주입',
-            '매뉴얼 파일 생성',
-            '백업 및 버전 관리',
-          ],
-        },
-      ],
-      features: [
-        {
-          index: 1,
-          name: '매뉴얼 템플릿 관리',
-          details: ['템플릿 초기화 및 구성', '데이터 변환 및 검증', '동적 데이터 주입'],
-        },
-        {
-          index: 2,
-          name: '자동화된 매뉴얼 생성',
-          details: ['컨텍스트 기반 생성', '환경 변수 처리', '경로 동적 해석'],
-        },
-        {
-          index: 3,
-          name: '백업 및 로그 관리',
-          details: ['자동 백업 생성', '버전 관리', '복원 기능', '상세 로깅'],
-        },
-      ],
-      backupManagement: [
-        {
-          title: '백업 정책',
-          description: '최대 10개 버전 유지',
-        },
-        {
-          title: '백업 위치',
-          description: '`backups/` 디렉토리',
-        },
-        {
-          title: '백업 주기',
-          description: '매뉴얼 생성 시 자동 백업',
-        },
-        {
-          title: '로그 관리',
-          description: 'Winston 로거를 통한 상세 로깅',
-        },
-      ],
-      structuralAspects: [
-        {
-          title: '모듈화',
-          description: '기능별 독립적인 모듈 구성',
-        },
-        {
-          title: '확장성',
-          description: '플러그인 방식의 기능 확장 지원',
-        },
-        {
-          title: '유연성',
-          description: '다양한 환경에서의 실행 지원',
-        },
-        {
-          title: '재사용성',
-          description: '공통 컴포넌트 추상화',
-        },
-      ],
-      functionalAspects: [
-        {
-          title: '자동화',
-          description: '반복 작업의 자동화',
-        },
-        {
-          title: '검증',
-          description: '데이터 및 출력 검증',
-        },
-        {
-          title: '오류 처리',
-          description: '상세한 오류 메시지 제공',
-        },
-        {
-          title: '로깅',
-          description: '시스템 동작 추적',
-        },
-      ],
-      codeQuality: [
-        {
-          title: 'TypeScript',
-          description: '정적 타입 검사',
-        },
-        {
-          title: 'ESLint',
-          description: '코드 스타일 통일',
-        },
-        {
-          title: 'Jest',
-          description: '단위 테스트 및 통합 테스트',
-        },
-        {
-          title: 'JSDoc',
-          description: '코드 문서화',
-        },
-      ],
-      extensibility: [
-        {
-          title: '템플릿 확장',
-          description: '새로운 템플릿 추가 용이',
-        },
-        {
-          title: '기능 확장',
-          description: '플러그인 시스템 지원',
-        },
-        {
-          title: '출력 형식',
-          description: '다양한 출력 형식 지원',
-        },
-        {
-          title: '통합',
-          description: '외부 시스템과의 통합 지원',
-        },
-      ],
-      basicCommand: 'npx ts-node index.ts',
-      pathCommand:
-        'npx ts-node index.ts --path <프로젝트경로> --templates <템플릿경로> --output <출력경로>',
-      changes: [
-        {
-          date: timestamp.split('T')[0],
-          description: '시스템 초기 구현',
-        },
-        {
-          date: timestamp.split('T')[0],
-          description: '백업 관리 기능 추가',
-        },
-        {
-          date: timestamp.split('T')[0],
-          description: '로깅 시스템 개선',
-        },
-      ],
-      generated_date: timestamp,
+      recentChanges: ['플러그인 시스템 업데이트', 'API 엔드포인트 추가', '자동화 스크립트 개선'],
+      version: '1.0.0',
+      description: 'Figma MCP Server 시스템',
+      author: process.env.USER || 'unknown',
+      timestamp: new Date().toISOString(),
     };
   }
 
-  public getTemplateDir(): string {
-    return this.templateDir;
+  private async analyzeKeyFiles(
+    _projectPath: string
+  ): Promise<Array<{ name: string; description: string }>> {
+    return [
+      { name: 'index.ts', description: '메인 엔트리 포인트' },
+      { name: 'template-manager.ts', description: '템플릿 관리 모듈' },
+      { name: 'manual-generator.ts', description: '매뉴얼 생성 모듈' },
+    ];
+  }
+
+  private async getSystemEnvironment(): Promise<string> {
+    try {
+      const packageJsonPath = path.join(this.projectRoot, 'package.json');
+      const content = await fs.readFile(packageJsonPath, 'utf-8');
+      const packageJson = JSON.parse(content);
+
+      return `Node.js 환경\nTypeScript ${packageJson.devDependencies?.typescript || '최신 버전'}\n`;
+    } catch (error) {
+      return '시스템 환경 정보를 가져올 수 없습니다.';
+    }
   }
 }

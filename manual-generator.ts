@@ -1,54 +1,105 @@
-import fs from 'fs-extra';
-import path from 'path';
-import { TemplateManager } from './template-manager';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import logger from './logger';
+import { ManualGeneratorOptions, ManualTemplateData } from './types';
+import { TemplateManager } from './template-manager';
 
 export class ManualGenerator {
   private templateManager: TemplateManager;
-  private outputDir: string;
+  private options: ManualGeneratorOptions;
 
-  constructor(templateManager: TemplateManager, outputDir: string) {
-    this.templateManager = templateManager;
-    this.outputDir = outputDir;
+  constructor(options: ManualGeneratorOptions) {
+    this.options = options;
+    this.templateManager = new TemplateManager(
+      {
+        projectRoot: options.inputDir,
+        templateDir: options.templateDir,
+        backupDir: path.join(options.outputDir, 'backups'),
+        maxBackups: 10,
+        debug: options.debug,
+      },
+      {
+        projectRoot: options.inputDir,
+      }
+    );
   }
 
-  public async generateManual(): Promise<void> {
+  public async generate(): Promise<void> {
     try {
-      // 메인 매뉴얼 생성
-      const mainTemplatePath = path.join(this.templateManager.getTemplateDir(), 'main.md');
-      const mainOutputPath = path.join(this.outputDir, 'main.md');
+      // 템플릿 데이터 준비
+      const templateData = await this.templateManager.getDefaultTemplateData();
 
-      // 템플릿 데이터 가져오기
-      const templateData = this.templateManager.getDefaultTemplateData();
+      // 출력 디렉토리 생성
+      const outputDir = path.join(path.dirname(this.options.inputDir), 'manuals');
+      await fs.ensureDir(outputDir);
+      await fs.ensureDir(path.join(outputDir, 'backups'));
 
-      // 템플릿 처리
-      const mainContent = await this.templateManager.processTemplate(
-        mainTemplatePath,
-        templateData
-      );
+      // 기존 매뉴얼 백업
+      await this.backupExistingManuals(outputDir);
 
-      // 결과 저장
-      await fs.writeFile(mainOutputPath, mainContent, 'utf-8');
-      logger.info(`매뉴얼 생성 완료: ${mainOutputPath}`);
+      // 매뉴얼 생성
+      await this.generateManuals(templateData, outputDir);
 
-      // 백업 생성
-      const backupPath = path.join(
-        this.outputDir,
-        'backups',
-        `main-${new Date().toISOString().replace(/[-:.]/g, '')}.md`
-      );
-      await fs.ensureDir(path.dirname(backupPath));
-      await fs.copy(mainOutputPath, backupPath);
-      logger.info(`매뉴얼 백업 생성 완료: ${backupPath}`);
-
-      // 시스템 상태 업데이트
-      await this.templateManager.updateStatus({
-        lastRun: new Date().toISOString(),
-        status: 'SUCCESS',
-        outputPath: mainOutputPath,
-      });
+      logger.info(`매뉴얼이 생성되었습니다: ${outputDir}`);
     } catch (error) {
       logger.error(`매뉴얼 생성 실패: ${(error as Error).message}`);
+      throw error;
+    }
+  }
+
+  private async backupExistingManuals(outputDir: string): Promise<void> {
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '');
+      const files = ['main.md', 'control.md', 'figma-setup.md'];
+
+      for (const file of files) {
+        const sourcePath = path.join(outputDir, file);
+        if (await fs.pathExists(sourcePath)) {
+          const backupPath = path.join(
+            outputDir,
+            'backups',
+            `${path.parse(file).name}-${timestamp}${path.parse(file).ext}`
+          );
+          await fs.copy(sourcePath, backupPath);
+        }
+      }
+    } catch (error) {
+      logger.error(`매뉴얼 백업 실패: ${(error as Error).message}`);
+      throw error;
+    }
+  }
+
+  private async generateManuals(
+    templateData: ManualTemplateData,
+    outputDir: string
+  ): Promise<void> {
+    try {
+      const templateFiles = ['main', 'control', 'figma-setup'];
+
+      // 매뉴얼 생성
+      for (const name of templateFiles) {
+        const templatePath = path.join(this.options.templateDir, `${name}.md`);
+        const content = await this.templateManager.processTemplate(templatePath, templateData);
+        const outputPath = path.join(outputDir, `${name}.md`);
+        await fs.writeFile(outputPath, content, 'utf-8');
+        logger.info(`매뉴얼이 생성되었습니다: ${outputPath}`);
+      }
+
+      // 타겟 디렉토리에 복사
+      const targetDir = path.join(
+        path.dirname(this.options.inputDir),
+        'figma-mcp-server',
+        'manuals'
+      );
+      await fs.ensureDir(targetDir);
+      for (const name of templateFiles) {
+        const sourcePath = path.join(outputDir, `${name}.md`);
+        const targetPath = path.join(targetDir, `${name}.md`);
+        await fs.copy(sourcePath, targetPath);
+        logger.info(`매뉴얼이 생성되었습니다: ${targetPath}`);
+      }
+    } catch (error) {
+      logger.error(`매뉴얼 파일 생성 실패: ${(error as Error).message}`);
       throw error;
     }
   }

@@ -1,166 +1,149 @@
-# {{title}}
+# {{systemName}} 설정 가이드
 
-## 1. 시스템 개요
+## 1. 개요
 
-{{description}}
+{{systemPurpose}}
 
-## 2. 개발 환경
+## 2. 시스템 요구사항
 
-{{#each environments}}
+### Figma 요구사항
 
-- {{name}}: {{description}}
+- Figma 계정 (Professional 또는 Enterprise)
+- Figma Desktop App
+- Figma Plugin Development 권한
+
+### 개발 환경 요구사항
+
+- Node.js v16 이상
+- TypeScript 4.5 이상
+- Git
+
+## 3. Figma API 설정
+
+### API 키 발급
+
+1. Figma 계정 설정 접속
+2. Access Tokens 섹션으로 이동
+3. 새 API 키 생성
+4. 권한 설정 및 확인
+
+### API 키 설정
+
+1. `.env` 파일 생성
+2. API 키 추가:
+
+```bash
+FIGMA_ACCESS_TOKEN=your_api_key_here
+FIGMA_FILE_ID=your_file_id_here
+```
+
+## 4. 플러그인 설정
+
+### 플러그인 개발 환경
+
+1. Figma Plugin Development 모드 활성화
+2. 플러그인 프로젝트 생성
+3. 매니페스트 파일 설정
+
+### 플러그인 기능
+
+- {{plugins.designSystem}}
+- {{plugins.codeGenerator}}
+- {{plugins.assetManager}}
+
+## 5. 컴포넌트 설정
+
+### 컴포넌트 관리
+
+- {{automationScripts.componentGeneration}}
+- {{automationScripts.styleUpdates}}
+- {{automationScripts.assetExport}}
+
+### 디자인 시스템 통합
+
+1. 컴포넌트 라이브러리 연결
+2. 스타일 가이드 설정
+3. 토큰 시스템 구성
+
+## 6. API 통합
+
+### 엔드포인트 설정
+
+- {{integrationFeatures.apiEndpoints}}
+- {{integrationFeatures.authentication}}
+- {{integrationFeatures.dataSync}}
+
+### 데이터 동기화
+
+1. 실시간 동기화 설정
+2. 변경 사항 추적
+3. 충돌 해결 전략
+
+## 7. 검증 및 테스트
+
+### 검증 기준
+
+{{#each validationCriteria}}
+
+- {{this}}
   {{/each}}
 
-## 3. 요구사항
+### 테스트 방법
 
-{{#each requirements}}
+{{#each validationMethods}}
 
-- {{title}}: {{description}}
+- {{this}}
   {{/each}}
 
-## 4. 설치 단계
+### 테스트 결과
 
-{{#each installSteps}}
-{{index}}. {{description}}
-{{#if command}}
+{{#each validationResults}}
 
-```bash
-{{command}}
-```
-
-{{/if}}
-{{/each}}
-
-## 5. 파일 구조
-
-```
-{{projectRoot}}/
-{{directoryStructure}}
-```
-
-## 6. 개발 환경 설정
-
-{{#each devSetup}}
-
-### {{title}}
-
-{{description}}
-{{#if command}}
-
-```bash
-{{command}}
-```
-
-{{/if}}
-{{/each}}
-
-## 7. 빌드 및 배포
-
-{{#each deploySteps}}
-
-### {{title}}
-
-{{description}}
-{{#if command}}
-
-```bash
-{{command}}
-```
-
-{{/if}}
-{{/each}}
-
-## 8. 주요 기능
-
-{{#each features}}
-
-### {{title}}
-
-{{description}}
-{{#if example}}
-
-```typescript
-{
-  {
-    example;
-  }
-}
-```
-
-{{/if}}
-{{/each}}
-
-## 9. API 문서
-
-{{#each apis}}
-
-### {{name}}
-
-- 엔드포인트: `{{endpoint}}`
-- 메서드: {{method}}
-- 설명: {{description}}
-  {{#if parameters}}
-- 파라미터:
-  {{#each parameters}}
-  - {{name}}: {{description}}
-    {{/each}}
-    {{/if}}
-    {{/each}}
-
-## 10. 테스트
-
-{{#each testTypes}}
-
-### {{title}}
-
-{{description}}
-{{#if command}}
-
-```bash
-{{command}}
-```
-
-{{/if}}
-{{/each}}
-
-## 11. 테스트 케이스
-
-{{#each testCases}}
-
-### {{title}}
-
-- 목적: {{purpose}}
-- 입력: {{input}}
-- 예상 결과: {{expectedOutput}}
+- {{this}}
   {{/each}}
 
-## 12. 문제 해결
+## 8. 문제 해결
 
-{{#each troubleshooting}}
+### 일반적인 문제
 
-### {{title}}
+1. API 연결 실패
 
-- 문제: {{problem}}
-- 해결: {{solution}}
-  {{/each}}
+   - API 키 확인
+   - 네트워크 연결 확인
+   - CORS 설정 확인
 
-## 13. 디버깅
+2. 플러그인 오류
 
-{{#each debugging}}
+   - 매니페스트 검증
+   - 권한 설정 확인
+   - 콘솔 로그 확인
 
-### {{title}}
+3. 동기화 문제
+   - 파일 ID 확인
+   - 권한 레벨 확인
+   - 캐시 초기화
 
-{{description}}
-{{#if command}}
+### 디버깅
 
-```bash
-{{command}}
-```
+1. Chrome DevTools 사용
+2. Figma Plugin DevTools 활성화
+3. 로그 레벨 설정
 
-{{/if}}
-{{/each}}
+## 9. 보안 설정
 
-## 14. 변경 이력
+### API 보안
+
+1. API 키 관리
+2. 접근 권한 설정
+3. 요청 제한 설정
+
+### 데이터 보안
+
+1. 데이터 암호화
+2. 백업 전략
+3. 접근 로그 관리
+
+## 10. 변경 이력
 
 {{#each changes}}
 
@@ -169,4 +152,4 @@
 
 ---
 
-_이 문서는 {{generated_date}}에 자동으로 생성되었습니다._
+_이 문서는 {{timestamp}}에 자동으로 생성되었습니다._

@@ -1,3 +1,7 @@
+import { TemplateDelegate } from 'handlebars';
+
+export type HandlebarsTemplateDelegate = TemplateDelegate<ManualTemplateData>;
+
 export interface SystemConfig {
   debug?: boolean;
   logLevel?: string;
@@ -43,4 +47,89 @@ export interface TemplateManagerOptions {
   backupDir: string;
   maxBackups: number;
   debug?: boolean;
+}
+
+export interface ManualTemplateData {
+  project: {
+    name: string;
+    path: string;
+    manualPath: string;
+  };
+  projectRoot: string;
+  systemName: string;
+  systemPurpose: string;
+  systemEnvironment: string;
+  directoryStructure: string;
+  keyFiles: Array<{ name: string; description: string }>;
+  mainFeatures: string[];
+  figmaMcpFeatures: Array<{
+    name: string;
+    description: string;
+  }>;
+  figmaIntegration: Array<{
+    category: string;
+    features: Array<{
+      name: string;
+      description: string;
+    }>;
+  }>;
+  automationScripts: {
+    componentGeneration: string;
+    styleUpdates: string;
+    assetExport: string;
+  };
+  plugins: {
+    designSystem: string;
+    codeGenerator: string;
+    assetManager: string;
+  };
+  implementation: {
+    structure: string;
+    functionality: string;
+    quality: string;
+    extensibility: string;
+  };
+  changes: Array<{
+    date: string;
+    description: string;
+  }>;
+  pipeline: {
+    design: string;
+    development: string;
+    automation: string;
+  };
+  validation: {
+    criteria: string[];
+    methods: string[];
+  };
+  validationCriteria: string[];
+  validationMethods: string[];
+  validationResults: string[];
+  integrationFeatures: {
+    apiEndpoints: string;
+    authentication: string;
+    dataSync: string;
+  };
+  cliExamples: string[];
+  recentChanges: string[];
+  version: string;
+  description: string;
+  author: string;
+  timestamp: string;
+}
+
+export interface BackupFile {
+  name: string;
+  path: string;
+  mtime: number;
+}
+
+export interface ChangeRecord {
+  type: string;
+  description: string;
+  timestamp: string;
+  status: string;
+  author?: string;
+  scope?: string;
+  relatedFiles?: string[];
 }

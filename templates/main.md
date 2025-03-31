@@ -6,27 +6,37 @@
 
 {{systemPurpose}}
 
-### 시스템 환경
+### 주요 기능
 
-{{#each environments}}
+{{#each mainFeatures}}
+
+- {{this}}
+  {{/each}}
+
+### Figma MCP Server 기능
+
+{{#each figmaMcpFeatures}}
 
 - {{name}}: {{description}}
   {{/each}}
+
+### 시스템 환경
+
+{{systemEnvironment}}
 
 ## 2. 시스템 구조
 
 ### 디렉토리 구조
 
 ```
-{{projectRoot}}/
 {{directoryStructure}}
 ```
 
 ### 주요 파일 설명
 
-{{#each fileDescriptions}}
+{{#each keyFiles}}
 
-- `{{path}}`: {{description}}
+- `{{name}}`: {{description}}
   {{/each}}
 
 ## 3. 시스템 검증
@@ -35,103 +45,90 @@
 
 {{#each validationCriteria}}
 
-- {{title}}: {{description}}
+- {{this}}
   {{/each}}
 
 ### 검증 방법
 
 {{#each validationMethods}}
 
-- {{title}}: {{description}}
+- {{this}}
   {{/each}}
 
 ### 검증 결과
 
 {{#each validationResults}}
 
-- {{title}}: {{description}}
+- {{this}}
   {{/each}}
 
 ## 4. 주요 기능
 
+### Figma 통합 기능
+
+#### API 및 인증
+
+- {{integrationFeatures.apiEndpoints}}
+- {{integrationFeatures.authentication}}
+- {{integrationFeatures.dataSync}}
+
 ### Pipeline 및 Workflow
 
-{{#each pipelines}}
-{{index}}. {{name}}
-{{#each steps}}
+**개발 파이프라인:**
 
-- {{this}}
-  {{/each}}
-  {{/each}}
+- {{pipeline.design}}
+- {{pipeline.development}}
+- {{pipeline.automation}}
 
-### 기능 목록
+### 자동화 스크립트
 
-{{#each features}}
-{{index}}. {{name}}
-{{#each details}}
+- 컴포넌트 생성: {{automationScripts.componentGeneration}}
+- 스타일 업데이트: {{automationScripts.styleUpdates}}
+- 에셋 내보내기: {{automationScripts.assetExport}}
 
-- {{this}}
-  {{/each}}
-  {{/each}}
+### 플러그인 및 확장
 
-### 백업 관리와 로그·매뉴얼 동기화
-
-{{#each backupManagement}}
-
-- {{title}}: {{description}}
-  {{/each}}
+- 디자인 시스템: {{plugins.designSystem}}
+- 코드 생성: {{plugins.codeGenerator}}
+- 에셋 관리: {{plugins.assetManager}}
 
 ## 5. 구현 전략
 
 ### 시스템의 구조적 측면
 
-{{#each structuralAspects}}
-
-- {{title}}: {{description}}
-  {{/each}}
+- {{implementation.structure}}
 
 ### 기능적 측면
 
-{{#each functionalAspects}}
-
-- {{title}}: {{description}}
-  {{/each}}
+- {{implementation.functionality}}
 
 ### 코드 품질
 
-{{#each codeQuality}}
-
-- {{title}}: {{description}}
-  {{/each}}
+- {{implementation.quality}}
 
 ### 확장성
 
-{{#each extensibility}}
-
-- {{title}}: {{description}}
-  {{/each}}
+- {{implementation.extensibility}}
 
 ## 6. 시스템 CLI
 
-### 기본 실행
+### CLI 예제
+
+{{#each cliExamples}}
 
 ```bash
-{{basicCommand}}
+{{this}}
 ```
 
-### 경로 지정 실행
-
-```bash
-{{pathCommand}}
-```
+{{/each}}
 
 ## 7. 최근 변경사항
 
-{{#each changes}}
+{{#each recentChanges}}
 
-- {{date}}: {{description}}
+- {{this}}
   {{/each}}
 
 ---
 
-_이 문서는 {{generated_date}}에 자동으로 생성되었습니다._
+_이 문서는 {{timestamp}}에 자동으로 생성되었습니다._

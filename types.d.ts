@@ -103,6 +103,11 @@ export interface FileDescription {
 }
 
 export interface ManualTemplateData {
+  project: {
+    name: string;
+    path: string;
+    manualPath: string;
+  };
   systemName: string;
   systemPurpose: string;
   environments: Array<{
