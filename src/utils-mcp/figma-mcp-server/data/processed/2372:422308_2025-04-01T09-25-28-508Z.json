@@ -1,0 +1,14 @@
+{
+  "id": "2372:422308",
+  "name": "StartKit-Sample-Data",
+  "type": "INSTANCE",
+  "width": 1224,
+  "height": 60,
+  "children": [
+    {
+      "id": "I2372:422308;2030:408936",
+      "name": "Rounded-Card",
+      "type": "FRAME"
+    }
+  ]
+}

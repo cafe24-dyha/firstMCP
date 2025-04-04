@@ -1,0 +1,15 @@
+[
+  {
+    "name": "TypeScript 컴파일 에러",
+    "pattern": "TS\\d+:",
+    "solution": "TypeScript 설정을 확인하고 타입 오류를 수정하세요.",
+    "autoFix": false
+  },
+  {
+    "name": "Figma API 에러",
+    "pattern": "figma\\..*not found",
+    "solution": "Figma 플러그인 API 호출을 확인하세요.",
+    "autoFix": true,
+    "fixScript": "checkAndUpdateFigmaAPI"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "name": "figma-mcp-server",
+  "version": "1.0.0",
+  "description": "Figma MCP Server",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "NODE_PATH=../../../../node_modules ts-node-dev --respawn --transpile-only scripts-main/index.ts",
+    "build": "NODE_PATH=../../../../node_modules tsc",
+    "start": "NODE_PATH=../../../../node_modules node dist/index.js",
+    "generate:manual": "cd ../@manuals/scripts-main && NODE_PATH=../../../../node_modules npm run generate:figma-mcp",
+    "generate:manual:watch": "cd ../@manuals/scripts-main && NODE_PATH=../../../../node_modules npm run generate:watch --path=../../figma-mcp-server",
+    "sync-components": "NODE_PATH=../../../../node_modules ts-node scripts-main/sync-components.ts",
+    "transform-tokens": "NODE_PATH=../../../../node_modules ts-node scripts-main/transform-tokens.ts",
+    "generate-styleguide": "NODE_PATH=../../../../node_modules ts-node scripts-main/generate-styleguide.ts"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  },
+  "workspaces": [
+    "../.."
+  ],
+  "private": true,
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4"
+  }
+}

@@ -1,0 +1,280 @@
+# Figma 설정 시스템
+
+## 시스템 개요
+
+Figma 설정 및 자동화 시스템
+
+## 목적
+
+Figma 플러그인과 컴포넌트의 설정을 자동화하고 관리하는 시스템
+
+## 주요 기능
+
+Figma 플러그인 자동 설정
+컴포넌트 라이브러리 관리
+스타일 시스템 동기화
+자동화된 워크플로우
+
+## 구현 전략
+
+## setup-checker.ts
+- 라인 수: 244
+- 임포트: 6개
+    - import * as fs from "fs"
+  - import * as path from "path"
+  - import { exec } from "child_process"
+  - import { promisify } from "util"
+  - import * as semver from "semver"
+  - import { BaseErrorHandler } from "../../troubleshooting/core/handlers/base-handler"
+- 클래스: 1개
+    - FigmaSetupCheckerextends BaseErrorHandler
+- 인터페이스: 0개
+  
+- 함수: 1개
+    - async fix
+- 주요 주석:
+    - Node.js 버전 확인
+  - npm 확인
+  - 글로벌 의존성 확인
+  - 디렉토리 구조 확인
+  - manifest.json 검증
+  - tsconfig.json 검증
+  - package.json 검증
+  - TypeScript 컴파일 체크
+  - 빌드 테스트
+  - 번들 크기 체크
+  - 4MB 제한
+  - nodejs.org/");
+  - ... 다른 에러 패턴들
+  - 수정 검증 로직
+  - 의존성 설치
+  - 기본 설정 파일 복구
+  - 타입 정의 설치
+  - manifest.json 기본값
+  - tsconfig.json 기본값
+
+
+
+## setup-guide-updater.ts
+- 라인 수: 204
+- 임포트: 2개
+    - import fs from "fs"
+  - import path from "path"
+- 클래스: 1개
+    - SetupManualUpdater
+- 인터페이스: 2개
+    - PackageJson
+  - ManualSection
+- 함수: 0개
+  
+- 주요 주석:
+    - 1초
+
+
+
+## setup-manager.ts
+- 라인 수: 172
+- 임포트: 3개
+    - import { ErrorHandler } from "../../troubleshooting/scripts/error-handler"
+  - import { ErrorLogger } from "../../troubleshooting/scripts/error-logger"
+  - import { ErrorFixer } from "../../troubleshooting/scripts/error-fixer"
+- 클래스: 1개
+    - SetupManager
+- 인터페이스: 1개
+    - SetupConfig
+- 함수: 0개
+  
+- 주요 주석:
+    - 환경 설정 초기화
+  - 플러그인 관련 설정 확인
+  - 에러 처리 시스템 초기화
+  - tsconfig.json 설정 확인
+  - 필수 디렉토리 구조 확인
+  - 의존성 패키지 확인
+  - 플러그인 관련 타입 정의 확인
+  - UI 컴포넌트 설정 확인
+  - 메시지 핸들링 설정 확인
+  - 에러 로깅 시스템 초기화
+  - 에러 처리 규칙 설정
+  - 자동 수정 규칙 설정
+  - 에러 로깅
+  - 자동 수정 시도
+  - tsconfig.json 설정 검증
+  - 설정 검증 로직 구현
+  - 필수 디렉토리 구조 검증
+  - 디렉토리 구조 검증 로직 구현
+  - 필수 의존성 패키지 검증
+  - 의존성 검증 로직 구현
+  - 플러그인 타입 정의 검증
+  - 타입 정의 검증 로직 구현
+  - UI 컴포넌트 설정 검증
+  - UI 컴포넌트 검증 로직 구현
+  - 메시지 핸들링 설정 검증
+  - 메시지 핸들링 검증 로직 구현
+
+
+
+## setup-validator.ts
+- 라인 수: 128
+- 임포트: 1개
+    - import { BaseErrorHandler } from "../../troubleshooting/scripts/error-handler"
+- 클래스: 1개
+    - FigmaSetupValidatorextends BaseErrorHandler
+- 인터페이스: 2개
+    - FigmaPluginConfig
+  - ValidationResult
+- 함수: 0개
+  
+- 주요 주석:
+    - 환경 검증
+  - Node.js 버전 검증
+  - 프로젝트 구조 검증
+  - manifest.json 검증
+  - 유틸리티 메서드
+  - semver 비교 로직 구현
+  - 실제 구현 필요
+  - 전체 검증 실행
+
+
+
+## update-guide.ts
+- 라인 수: 16
+- 임포트: 1개
+    - import { SetupGuideUpdater } from "./setup-guide-updater"
+- 클래스: 0개
+  
+- 인터페이스: 0개
+  
+- 함수: 1개
+    - async main
+- 주요 주석:
+
+## 디렉토리 구조
+
+```
+figma-setup/
+├── scripts-main/
+│   ├── setup-checker.ts
+│   ├── setup-guide-updater.ts
+│   ├── setup-manager.ts
+│   ├── setup-validator.ts
+│   ├── update-guide.ts
+│   └── index.ts
+├── logs/
+│   ├── system.log
+│   ├── analysis.log
+│   ├── error.log
+│   └── performance.log
+└── manuals/
+    ├── backups/
+    ├── main.md
+    └── control.md
+```
+
+## 시스템 구성요소
+
+- setup-checker 모듈
+- setup-manager 모듈
+- setup-validator 모듈
+- update-guide 모듈
+
+## 시스템 흐름
+
+1. 초기화: 시스템 설정 및 환경 검사
+2. 분석: 스크립트 파일 스캔 및 분석
+3. 백업: 기존 매뉴얼 백업
+4. 생성: 새로운 매뉴얼 생성
+5. 검증: 생성된 매뉴얼 유효성 검사
+6. 완료: 결과 보고 및 정리
+
+## 이벤트 시스템
+
+- 파일 변경 감지
+- 오류 발생 알림
+- 백업 완료 알림
+- 생성 완료 알림
+
+## 오류 처리
+
+- 자동 복구 시도
+- 로그 기록
+- 관리자 알림
+- 백업 복원
+
+## 동기화 전략
+
+- 파일 잠금 사용
+- 버전 관리
+- 충돌 감지
+- 자동 병합
+
+## 최적화 전략
+
+- 캐시 사용
+- 병렬 처리
+- 메모리 최적화
+- 비동기 처리
+
+## 분석 도구
+
+- 코드 분석기
+- 성능 모니터
+- 메모리 프로파일러
+- 로그 분석기
+
+## 최근 업데이트
+
+- 로그 포맷 개선
+- 오류 추적 강화
+- 성능 모니터링 추가
+
+## 최적화 상태
+
+normal
+
+## 실행 방법
+
+1. **기본 실행**
+   ```bash
+   # 현재 폴더에서 실행
+   cd src/utils-mcp/figma-setup
+   npx ts-node ../scripts-main/index.ts
+
+   # 디버그 모드
+   DEBUG=true npx ts-node ../scripts-main/index.ts
+
+   # 상세 로깅
+   LOG_LEVEL=debug npx ts-node ../scripts-main/index.ts
+   ```
+
+2. **경로 지정 실행**
+   ```bash
+   # 상대 경로
+   npx ts-node ../scripts-main/index.ts --path ./path/to/folder
+
+   # 절대 경로
+   npx ts-node ../scripts-main/index.ts --path /absolute/path/to/folder
+   ```
+
+## 용어 사전
+
+- 플러그인: Figma 플러그인
+- 컴포넌트: Figma 컴포넌트
+- 스타일: Figma 스타일 시스템
+- 워크플로우: 자동화된 작업 흐름
+
+## 최근 변경사항
+
+- setup-checker.ts: 마지막 수정 20250328175012
+- setup-guide-updater.ts: 마지막 수정 20250328175128
+- setup-manager.ts: 마지막 수정 20250328175720
+- setup-validator.ts: 마지막 수정 20250328175826
+- update-guide.ts: 마지막 수정 20250328180010
+
+## 성능 지표
+
+- 메모리 사용량: 161.33 MB
+- CPU 사용량: 안정적
+- 네트워크 상태: 정상
+- 오류율: 0%
+- 자동화 성공률: 100%

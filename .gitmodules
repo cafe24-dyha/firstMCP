@@ -1,0 +1,3 @@
+[submodule "src/utils-mcp/@manuals/scripts-main"]
+	path = src/utils-mcp/@manuals/scripts-main
+	url = https://github.com/cafe24-dyha/firstMCP.git

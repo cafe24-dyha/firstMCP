@@ -1,0 +1,89 @@
+{{! 기능 목록 템플릿 }}
+#
+{{title}}
+기능 목록 ## 매뉴얼 템플릿 초기화 및 데이터 변환
+{{#with templateInitialization}}
+  ### 템플릿 디렉토리 구조 - 위치: `{{directory}}` - 구성:
+  {{#each components}}
+    -
+    {{name}}:
+    {{description}}
+  {{/each}}
+
+  ### 데이터 변환 및 검증 - 입력 데이터 유효성 검사:
+  {{validation.inputData}}
+  - Handlebars 템플릿 처리:
+  {{validation.templateProcessing}}
+  - 동적 데이터 주입:
+  {{validation.dataInjection}}
+{{/with}}
+
+## 매뉴얼 파일 자동 생성
+{{#with manualGeneration}}
+  ### 템플릿 기반 생성 - 위치: `{{outputDirectory}}` - 형식:
+  {{format}}
+  - 컨텍스트 기반 동적 생성:
+  {{contextDriven}}
+
+  ### 시스템 정보 수집 - 환경 변수 처리:
+  {{systemInfo.envVars}}
+  - 경로 동적 해석:
+  {{systemInfo.pathResolution}}
+  - 시스템 상태:
+  {{systemInfo.status}}
+{{/with}}
+
+## 백업 관리와 로그·매뉴얼 동기화
+{{#with backupManagement}}
+  ### 템플릿 백업 - 위치: `{{templateBackupPath}}` - 정책:
+  {{#each backupPolicy}}
+    -
+    {{this}}
+  {{/each}}
+
+  ### 매뉴얼 백업 - 위치: `{{manualBackupPath}}` - 명명 규칙:
+  {{namingConvention}}
+  - 기능:
+  {{#each backupFeatures}}
+    -
+    {{this}}
+  {{/each}}
+{{/with}}
+
+## 자동화 테스트
+{{#with automationTests}}
+  ### 디렉토리 독립성 테스트 - 상대 경로 처리:
+  {{directoryTests.relativePath}}
+  - 동적 경로 해석:
+  {{directoryTests.dynamicPath}}
+  - 경로 독립성:
+  {{directoryTests.pathIndependence}}
+
+  ### 컨텍스트 기반 출력 테스트 - 데이터 처리:
+  {{contextTests.dataProcessing}}
+  - 템플릿 처리:
+  {{contextTests.templateProcessing}}
+  - 출력 검증:
+  {{contextTests.outputValidation}}
+
+  ### 백업 관리 테스트 - 백업 생성:
+  {{backupTests.creation}}
+  - 복원 기능:
+  {{backupTests.restoration}}
+  - 정리 작업:
+  {{backupTests.cleanup}}
+{{/with}}
+
+## 실행 상태
+{{#with executionStatus}}
+  - 처리된 파일:
+  {{processedFiles}}
+  - 생성된 매뉴얼:
+  {{generatedManuals}}
+  - 백업 상태:
+  {{backupStatus}}
+  - 오류 발생:
+  {{errors}}
+  - 경고 발생:
+  {{warnings}}
+{{/with}}

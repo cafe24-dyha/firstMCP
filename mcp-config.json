@@ -1,0 +1,46 @@
+{
+  "name": "figma-plugin-mcp",
+  "version": "1.0.0",
+  "description": "Figma Plugin Development Environment with MCP",
+  "scripts": {
+    "dev": "mcp dev",
+    "build": "mcp build",
+    "start": "mcp start",
+    "test": "mcp test"
+  },
+  "mcp": {
+    "plugins": {
+      "figma": {
+        "manifest": "./manifest.json",
+        "entry": "./code.ts",
+        "output": "./build"
+      }
+    },
+    "devTools": {
+      "port": 9000,
+      "https": false
+    },
+    "automation": {
+      "packageInstall": true,
+      "environmentSetup": true,
+      "documentation": true,
+      "errorHandling": {
+        "enabled": true,
+        "autoFix": true,
+        "documentation": {
+          "path": "./docs/error-cases",
+          "categories": [
+            "build-errors",
+            "runtime-errors",
+            "typescript-errors",
+            "figma-api-errors"
+          ]
+        },
+        "logging": {
+          "path": "./logs",
+          "format": "json"
+        }
+      }
+    }
+  }
+}

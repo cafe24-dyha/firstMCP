@@ -1,0 +1,18 @@
+{
+  "components": {
+    "output": "./src/utils-mcp/figma-mcp-server/components",
+    "url": "${FIGMA_FILE_URL}",
+    "token": "${FIGMA_API_TOKEN}"
+  },
+  "mcpServers": {
+    "figma": {
+      "command": "node",
+      "args": ["./src/utils-mcp/figma-mcp-server/@scripts/index.js"],
+      "env": {
+        "FIGMA_API_TOKEN": "${FIGMA_API_TOKEN}",
+        "TRANSPORT_TYPE": "stdio",
+        "NODE_PATH": "./node_modules"
+      }
+    }
+  }
+}

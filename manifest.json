@@ -1,0 +1,19 @@
+{
+  "name": "CDS Maker",
+  "id": "cds-maker-plugin",
+  "api": "1.0.0",
+  "main": "build/code.js",
+  "ui": "build/ui.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  },
+  "permissions": ["currentuser", "activeusers", "fileusers", "payments"],
+  "menu": [
+    { "name": "Create CDS", "command": "create-cds" },
+    { "name": "Update Components", "command": "update-components" },
+    { "name": "Export Styles", "command": "export-styles" }
+  ]
+}

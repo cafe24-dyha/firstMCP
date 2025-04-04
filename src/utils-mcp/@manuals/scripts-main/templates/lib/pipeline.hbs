@@ -1,0 +1,63 @@
+{{! 파이프라인 템플릿 }}
+#
+{{title}}
+파이프라인 ## 템플릿 생성 Pipeline
+{{#each templateCreationSteps}}
+  {{stepNumber}}.
+  {{name}}
+  - 소스: `{{sourcePath}}` - 대상: `{{targetPath}}` - 작업:
+  {{description}}
+  - 상태:
+  {{status}}
+  {{#if validation}}
+    - 검증 결과:
+    {{validation}}
+  {{/if}}
+{{/each}}
+
+## 매뉴얼 생성 Pipeline
+{{#each manualGenerationSteps}}
+  {{stepNumber}}.
+  {{name}}
+  - 소스: `{{sourcePath}}` - 대상: `{{targetPath}}` - 작업:
+  {{description}}
+  - 상태:
+  {{status}}
+  {{#if validation}}
+    - 검증 결과:
+    {{validation}}
+  {{/if}}
+{{/each}}
+
+## 실행 로그
+{{#each executionLogs}}
+  ###
+  {{timestamp}}
+  - 단계:
+  {{step}}
+  - 상태:
+  {{status}}
+  - 메시지:
+  {{message}}
+  {{#if error}}
+    - 오류:
+    {{error}}
+  {{/if}}
+{{/each}}
+
+## 검증 결과
+{{#each validationResults}}
+  ###
+  {{name}}
+  - 상태:
+  {{status}}
+  - 결과:
+  {{result}}
+  {{#if details}}
+    - 상세:
+    {{#each details}}
+      -
+      {{this}}
+    {{/each}}
+  {{/if}}
+{{/each}}

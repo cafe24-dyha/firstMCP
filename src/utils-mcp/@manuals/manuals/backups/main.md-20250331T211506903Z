@@ -1,0 +1,120 @@
+# MCP Scripts Main System
+
+## 1. 시스템 개요
+
+### 시스템 목적
+
+메인 프로세스 스크립트를 통한 시스템 자동화
+
+### 시스템 환경
+
+
+## 2. 시스템 구조
+
+### 디렉토리 구조
+
+```
+
+├── index.ts
+```
+
+### 주요 파일 설명
+
+
+## 3. 시스템 검증
+
+### 검증 기준
+
+
+- Directory-Agnostic Execution 정상 동작
+
+- Context-Driven Output이 올바른 경로에 처리
+
+- CLI 명령어의 상대 경로 및 동적 변수 처리
+
+- 템플릿 데이터 처리 상태 적합성
+
+- 문서 구조의 일관성
+
+### 검증 방법
+
+
+- 자동화된 테스트 스크립트 실행
+
+- 경로 독립성 검증
+
+- 출력 결과 검증
+
+- 백업 시스템 검증
+
+### 검증 결과
+
+
+## 4. 주요 기능
+
+### Pipeline 및 Workflow
+
+**템플릿 생성 Pipeline:**
+
+- instruction.md 요구사항 검토
+
+- scripts-main 구축
+
+- templates 백업
+
+- templates 구축
+
+**매뉴얼 생성 Pipeline:**
+
+- scripts-main 시스템 검토
+
+- templates 활용
+
+- backups 백업
+
+- manuals 생성
+
+- 결과 주소 제시
+
+### 기능 목록
+
+
+### 백업 관리와 로그·매뉴얼 동기화
+
+
+## 5. 구현 전략
+
+### 시스템의 구조적 측면
+
+
+### 기능적 측면
+
+
+### 코드 품질
+
+
+### 확장성
+
+
+## 6. 시스템 CLI
+
+### 기본 실행
+
+```bash
+npx ts-node index.ts
+```
+
+### 경로 지정 실행
+
+```bash
+npx ts-node index.ts --path&#x3D;../project --templates&#x3D;./templates --output&#x3D;../manuals
+```
+
+## 7. 최근 변경사항
+
+
+- : 
+
+---
+
+_이 문서는 2025-03-31T21:15:06.892Z에 자동으로 생성되었습니다._

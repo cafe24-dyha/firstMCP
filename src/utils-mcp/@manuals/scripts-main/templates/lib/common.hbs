@@ -1,0 +1,101 @@
+{{!-- 헤더 섹션 --}}
+{{#*inline "header"}}
+# {{title}}
+**버전**: {{version}}
+**작성자**: {{author}}
+**작성일**: {{date}}
+{{/inline}}
+
+{{!-- 코드 블록 --}}
+{{#*inline "code"}}
+```{{language}}
+{{content}}
+```
+{{/inline}}
+
+{{!-- 로그 블록 --}}
+{{#*inline "log"}}
+```log
+[{{level}}][{{timestamp}}] {{message}}
+{{#if details}}{{details}}{{/if}}
+```
+{{/inline}}
+
+{{!-- 디버그 블록 --}}
+{{#*inline "debug"}}
+[DEBUG: {{stage}}-{{status}}] {{message}}
+{{/inline}}
+
+{{!-- 표 헤더 --}}
+{{#*inline "table_header"}}
+| {{#each headers}}{{this}} |{{/each}}
+|{{#each headers}}---|{{/each}}
+{{/inline}}
+
+{{!-- 표 행 --}}
+{{#*inline "table_row"}}
+| {{#each cells}}{{this}} |{{/each}}
+{{/inline}}
+
+{{!-- 경고 블록 --}}
+{{#*inline "warning"}}
+> ⚠️ **주의**
+> {{message}}
+{{/inline}}
+
+{{!-- 정보 블록 --}}
+{{#*inline "info"}}
+> ℹ️ **참고**
+> {{message}}
+{{/inline}}
+
+{{!-- 체크리스트 --}}
+{{#*inline "checklist"}}
+{{#each items}}
+- [ ] {{this}}
+{{/each}}
+{{/inline}}
+
+{{!-- 시스템 흐름도 --}}
+{{#*inline "flowchart"}}
+```mermaid
+graph {{direction}}
+{{#each nodes}}
+{{id}}[{{label}}]
+{{/each}}
+{{#each edges}}
+{{from}} --> {{to}}{{#if label}}|{{label}}|{{/if}}
+{{/each}}
+```
+{{/inline}}
+
+{{!-- 에러 처리 블록 --}}
+{{#*inline "error_handler"}}
+```error
+[ERROR] {{error_code}} - {{error_message}}
+원인: {{cause}}
+영향: {{impact}}
+해결방안:
+{{#each solutions}}
+- {{this}}
+{{/each}}
+```
+{{/inline}}
+
+{{!-- 시스템 상태 블록 --}}
+{{#*inline "system_status"}}
+```status
+시스템 상태: {{status}}
+CPU: {{cpu_usage}}
+메모리: {{memory_usage}}
+에러율: {{error_rate}}
+처리량: {{throughput}}
+```
+{{/inline}}
+
+{{!-- 푸터 --}}
+{{#*inline "footer"}}
+---
+*이 문서는 {{generated_date}}에 자동으로 생성되었습니다.*
+{{#if last_updated}}*마지막 업데이트: {{last_updated}}*{{/if}}
+{{/inline}} 
