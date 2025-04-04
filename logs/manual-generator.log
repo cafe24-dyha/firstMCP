@@ -1,0 +1,14 @@
+[2025-03-29T04:17:50.164Z] ERROR: 매뉴얼 생성 실패 {"error":"템플릿 파일이 존재하지 않습니다"}
+[2025-03-29T04:17:50.164Z] DEBUG: 매뉴얼 생성 프로세스 종료
+[2025-03-29T04:17:50.166Z] INFO: 매뉴얼 생성 시작
+[2025-03-29T04:17:50.166Z] DEBUG: 메인 매뉴얼 템플릿 로드 시작
+[2025-03-29T04:17:50.166Z] ERROR: 템플릿 파일이 존재하지 않습니다 {"templatePath":"/Users/dyha/Documents/GitHub/figma/cdsMaker/templates/src/main.txt"}
+[2025-03-29T04:17:50.166Z] ERROR: 템플릿 로드 실패 {"error":"템플릿 파일이 존재하지 않습니다","templatePath":"/Users/dyha/Documents/GitHub/figma/cdsMaker/templates/src/main.txt"}
+[2025-03-29T04:17:50.166Z] ERROR: 매뉴얼 생성 실패 {"error":"템플릿 파일이 존재하지 않습니다"}
+[2025-03-29T04:17:50.166Z] DEBUG: 매뉴얼 생성 프로세스 종료
+[2025-03-29T04:17:50.168Z] INFO: 매뉴얼 생성 시작
+[2025-03-29T04:17:50.169Z] DEBUG: 메인 매뉴얼 템플릿 로드 시작
+[2025-03-29T04:17:50.169Z] ERROR: 템플릿 파일이 존재하지 않습니다 {"templatePath":"/Users/dyha/Documents/GitHub/figma/cdsMaker/templates/src/main.txt"}
+[2025-03-29T04:17:50.169Z] ERROR: 템플릿 로드 실패 {"error":"템플릿 파일이 존재하지 않습니다","templatePath":"/Users/dyha/Documents/GitHub/figma/cdsMaker/templates/src/main.txt"}
+[2025-03-29T04:17:50.169Z] ERROR: 매뉴얼 생성 실패 {"error":"템플릿 파일이 존재하지 않습니다"}
+[2025-03-29T04:17:50.169Z] DEBUG: 매뉴얼 생성 프로세스 종료

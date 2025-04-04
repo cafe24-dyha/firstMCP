@@ -1,0 +1,40 @@
+[ERROR][2025-03-28T08:49:13.258Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-checker.ts'
+[ERROR][2025-03-28T08:49:18.264Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-checker.ts'
+[ERROR][2025-03-28T08:49:28.270Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-checker.ts'
+[ERROR][2025-03-28T08:49:48.271Z] 복구: 최대 시도 횟수 초과
+[ERROR][2025-03-28T08:50:42.378Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-guide-updater.ts'
+[ERROR][2025-03-28T08:50:47.390Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-guide-updater.ts'
+[ERROR][2025-03-28T08:50:57.395Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-guide-updater.ts'
+[ERROR][2025-03-28T08:51:17.397Z] 복구: 최대 시도 횟수 초과
+[ERROR][2025-03-28T08:56:19.200Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-manager.ts'
+[ERROR][2025-03-28T08:56:24.210Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-manager.ts'
+[ERROR][2025-03-28T08:56:34.216Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-manager.ts'
+[ERROR][2025-03-28T08:56:54.217Z] 복구: 최대 시도 횟수 초과
+[ERROR][2025-03-28T08:57:32.933Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-validator.ts'
+[ERROR][2025-03-28T08:57:37.939Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-validator.ts'
+[ERROR][2025-03-28T08:57:47.946Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/setup-validator.ts'
+[ERROR][2025-03-28T08:58:07.947Z] 복구: 최대 시도 횟수 초과
+[ERROR][2025-03-28T08:59:16.535Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/update-guide.ts'
+[ERROR][2025-03-28T08:59:21.541Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/update-guide.ts'
+[ERROR][2025-03-28T08:59:31.546Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/update-guide.ts'
+[ERROR][2025-03-28T08:59:51.547Z] 복구: 최대 시도 횟수 초과
+[ERROR][2025-03-28T09:31:07.479Z] 백업 실패: Error: Cannot copy '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals' to a subdirectory of itself, '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals/backups/20250328183107'.
+[ERROR][2025-03-28T09:31:07.484Z] 백업 실패: Error: Cannot copy '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals' to a subdirectory of itself, '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals/backups/20250328183107'.
+[ERROR][2025-03-28T09:31:07.484Z] 복구: 실패 - Error: Cannot copy '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals' to a subdirectory of itself, '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals/backups/20250328183107'.
+[ERROR][2025-03-28T09:31:12.489Z] 백업 실패: Error: Cannot copy '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals' to a subdirectory of itself, '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals/backups/20250328183112'.
+[ERROR][2025-03-28T09:31:12.489Z] 복구: 실패 - Error: Cannot copy '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals' to a subdirectory of itself, '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals/backups/20250328183112'.
+[ERROR][2025-03-28T09:31:22.495Z] 백업 실패: Error: Cannot copy '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals' to a subdirectory of itself, '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals/backups/20250328183122'.
+[ERROR][2025-03-28T09:31:22.495Z] 복구: 실패 - Error: Cannot copy '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals' to a subdirectory of itself, '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/manuals/backups/20250328183122'.
+[ERROR][2025-03-28T09:31:42.497Z] 복구: 최대 시도 횟수 초과
+[ERROR][2025-03-28T11:03:57.484Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:04:02.494Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:04:12.504Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:04:32.505Z] 복구: 최대 시도 횟수 초과
+[ERROR][2025-03-28T11:05:02.642Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:05:07.753Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:05:17.782Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:05:37.783Z] 복구: 최대 시도 횟수 초과
+[ERROR][2025-03-28T11:07:17.543Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:07:22.554Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:07:32.563Z] 복구: 실패 - Error: ENOENT: no such file or directory, open '/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main/Users/dyha/Documents/GitHub/figma/cdsMaker/src/utils-mcp/@manuals/scripts-main'
+[ERROR][2025-03-28T11:07:52.565Z] 복구: 최대 시도 횟수 초과

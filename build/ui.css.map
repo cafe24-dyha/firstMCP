@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/styles/ui.css"],
+  "sourcesContent": ["\n.container {\n  padding: 16px;\n}\n\n.button-container {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n\nbutton {\n  padding: 8px 16px;\n  border-radius: 6px;\n  border: none;\n  background-color: #18A0FB;\n  color: white;\n  cursor: pointer;\n  transition: background-color 0.2s;\n}\n\nbutton:hover {\n  background-color: #0D8DE3;\n}"],
+  "mappings": "AACA,CAAC,UADD,QAEW,IACX,CAEA,CAAC,iBACC,QAAS,KACT,eAAgB,OAChB,IAAK,GACP,CAEA,OAXA,QAYW,IAAI,KAZf,cAaiB,IACf,OAAQ,KACR,iBAAkB,QAClB,MAAO,KACP,OAAQ,QACR,WAAY,iBAAiB,GAC/B,CAEA,MAAM,OACJ,iBAAkB,OACpB",
+  "names": []
+}
